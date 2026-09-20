@@ -1,13 +1,22 @@
-const PAINT_INHERIT = { color: true, "font-size": true };
+const scratch = document.createElement("div");
 
-function painted(rules, el, prop, inline, parentPainted) {
-  if (inline && inline[prop] != null && inline[prop] !== "") return inline[prop];
-  for (const rule of rules) {
-    if (rule.prop !== prop) continue;
-    if (matches(el, rule.selector)) return rule.value;
+function serialized(prop, value) {
+  if (!value) return "";
+  scratch.style.cssText = "";
+  scratch.style.setProperty(prop, value);
+  return scratch.style.getPropertyValue(prop);
+}
+
+function applyStyles(el, values) {
+  for (const prop of Object.keys(values)) {
+    if (values[prop]) el.style.setProperty(prop, values[prop]);
   }
-  if (PAINT_INHERIT[prop] && parentPainted && parentPainted[prop] != null) {
-    return parentPainted[prop];
+}
+
+function readStyles(el, props) {
+  const out = {};
+  for (const prop of props) {
+    out[prop] = el.style.getPropertyValue(prop);
   }
-  return "";
+  return out;
 }

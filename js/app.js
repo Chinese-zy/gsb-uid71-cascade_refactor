@@ -40,36 +40,7 @@ const props = ["color", "font-size", "width", "height"];
 const propName = { color: "颜色", "font-size": "字号", width: "宽", height: "高" };
 const byKey = Object.fromEntries(nodes.map((node) => [node.key, node]));
 
-function computedFor(node, parentComputed) {
-  const base = inherited(parentComputed);
-  for (const prop of props) {
-    const chosen = pick(rules, node, prop);
-    if (chosen != null) base[prop] = chosen;
-  }
-  return applyInline(base, node.inline);
-}
-
-function paintedFor(node, parentPainted) {
-  const out = {};
-  for (const prop of props) {
-    out[prop] = painted(rules, node, prop, node.inline, parentPainted);
-  }
-  return out;
-}
-
-const computed = {};
-const paints = {};
-function walk(key, parentKey) {
-  const node = byKey[key];
-  const parentComputed = parentKey ? computed[parentKey] : null;
-  const parentPainted = parentKey ? paints[parentKey] : null;
-  computed[key] = computedFor(node, parentComputed);
-  paints[key] = paintedFor(node, parentPainted);
-  for (const child of nodes) {
-    if (child.parent === key) walk(child.key, key);
-  }
-}
-walk("根", null);
+const computed = computeStyles(nodes, rules, props);
 
 const stage = document.getElementById("stage");
 const dom = {};
@@ -88,11 +59,7 @@ stage.appendChild(rootEl);
 
 for (const node of nodes) {
   const el = dom[node.key];
-  const view = paints[node.key];
-  if (view.color) el.style.color = view.color;
-  if (view["font-size"]) el.style.fontSize = view["font-size"];
-  if (view.width) el.style.width = view.width;
-  if (view.height) el.style.height = view.height;
+  applyStyles(el, computed[node.key]);
   el.style.padding = "8px";
   el.style.margin = "8px";
   el.style.border = "1px solid #d6d3d1";
@@ -100,9 +67,10 @@ for (const node of nodes) {
 
 const rows = document.getElementById("rows");
 for (const node of nodes) {
+  const painted = readStyles(dom[node.key], props);
   for (const prop of props) {
-    const left = computed[node.key][prop] || "";
-    const right = paints[node.key][prop] || "";
+    const left = serialized(prop, computed[node.key][prop]);
+    const right = painted[prop];
     const tr = document.createElement("tr");
     const diff = left !== right ? "diff" : "";
     tr.innerHTML =
