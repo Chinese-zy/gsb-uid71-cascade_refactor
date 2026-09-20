@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>层叠</title>
+  <link rel="stylesheet" href="css/page.css">
+</head>
+<body>
+  <main>
+    <section>
+      <h1>画面</h1>
+      <p class="note">左边是画上去的，右边表是算出来的。</p>
+      <div id="stage" class="stage"></div>
+    </section>
+    <section>
+      <h1>对照</h1>
+      <table>
+        <thead>
+          <tr><th>节点</th><th>属性</th><th>计算</th><th>画面</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="js/score.js"></script>
+  <script src="js/inherit.js"></script>
+  <script src="js/inline.js"></script>
+  <script src="js/paint.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

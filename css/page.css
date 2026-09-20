@@ -1,0 +1,26 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f4f1ea;
+  color: #1c1917;
+  font: 15px/1.45 "Songti SC", "Iowan Old Style", serif;
+}
+main {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 28px;
+  padding: 28px;
+}
+h1 { font-size: 22px; font-weight: 600; margin: 0 0 8px; }
+p.note { margin: 0 0 16px; color: #57534e; }
+.stage {
+  background: #fffdf8;
+  border: 1px solid #d6d3d1;
+  min-height: 280px;
+  padding: 16px;
+}
+.node { display: block; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { border-bottom: 1px solid #e7e5e4; text-align: left; padding: 8px 10px; font-size: 14px; }
+th { color: #78716c; font-weight: 600; }
+td.diff { color: #9f1239; }
